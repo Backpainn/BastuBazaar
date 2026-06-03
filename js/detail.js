@@ -1,0 +1,542 @@
+/* ============================================
+   BastuBazar — Detail Page Logic
+   Requires: data.js loaded before this file
+   ============================================ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const assetId = params.get('id');
+
+    if (!assetId) {
+        window.location.href = 'index.html';
+        return;
+    }
+
+    // Merge custom assets from localStorage
+    const customAssets = JSON.parse(localStorage.getItem('bastubazar_custom_assets') || '[]');
+    const allAssets = [...customAssets, ...assets];
+
+    // Find asset in our data store
+    const asset = allAssets.find(a => a.id === assetId);
+    if (!asset) {
+        window.location.href = 'index.html';
+        return;
+    }
+
+    document.title = `${asset.title} — BastuBazar`;
+    renderBreadcrumb(asset);
+    renderImage(asset);
+    renderMeta(asset);
+    renderDescription(asset);
+    renderSpecs(asset);
+    renderPriceCard(asset);
+    renderDealForm(asset);
+    renderOwnerCard(asset);
+    renderSimilarListings(asset, allAssets);
+    initNavbarScroll();
+    initReviewSystem(asset);
+});
+
+// ========== BREADCRUMB ==========
+
+function renderBreadcrumb(asset) {
+    const el = document.getElementById('breadcrumb-title');
+    if (el) el.textContent = asset.title;
+}
+
+// ========== HERO IMAGE ==========
+
+function renderImage(asset) {
+    const wrapper = document.getElementById('detail-img-wrapper');
+    if (!wrapper) return;
+
+    wrapper.innerHTML = `
+        <div class="detail-img" style="background: linear-gradient(135deg, ${asset.color}, ${adjustColor(asset.color, -15)})">
+            ${asset.imageSrc ? 
+                `<img src="${asset.imageSrc}" style="width:100%; height:100%; object-fit:cover;">` : 
+                `<span class="detail-emoji">${asset.emoji}</span>`
+            }
+        </div>
+        <div class="detail-img-badges">
+            <span class="badge-category"><i class="bi bi-tag-fill me-1"></i>${asset.category}</span>
+            <span class="badge-views"><i class="bi bi-eye-fill me-1"></i>${asset.views} views</span>
+        </div>
+    `;
+}
+
+// ========== TITLE & META ==========
+
+function renderMeta(asset) {
+    const el = document.getElementById('detail-meta');
+    if (!el) return;
+
+    el.innerHTML = `
+        <h1 class="detail-title" id="detail-title">${asset.title}</h1>
+        <div class="detail-meta-row">
+            <span class="detail-location">
+                <i class="bi bi-geo-alt-fill"></i> ${asset.location}
+            </span>
+            <span class="detail-posted">
+                <i class="bi bi-clock"></i> Posted ${asset.postedDate}
+            </span>
+        </div>
+        <div class="detail-tags">
+            ${asset.tags.map(tag => `<span class="tag tag-${tag} tag-lg">${capitalizeStr(tag)}</span>`).join('')}
+        </div>
+    `;
+}
+
+// ========== DESCRIPTION ==========
+
+function renderDescription(asset) {
+    const el = document.getElementById('detail-description');
+    if (!el) return;
+
+    el.innerHTML = `
+        <h3 class="detail-section-title"><i class="bi bi-text-left me-2"></i>Description</h3>
+        <p class="detail-desc-text">${asset.description}</p>
+    `;
+}
+
+// ========== SPECS TABLE ==========
+
+function renderSpecs(asset) {
+    const el = document.getElementById('detail-specs');
+    if (!el) return;
+
+    el.innerHTML = `
+        <h3 class="detail-section-title"><i class="bi bi-list-check me-2"></i>Key Details</h3>
+        <div class="specs-grid">
+            <div class="spec-item">
+                <span class="spec-label">Category</span>
+                <span class="spec-value">${asset.category}</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Condition</span>
+                <span class="spec-value">
+                    <span class="condition-dot condition-${asset.condition.toLowerCase().replace(' ', '-')}"></span>
+                    ${asset.condition}
+                </span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Available For</span>
+                <span class="spec-value">${asset.tags.map(t => capitalizeStr(t)).join(', ')}</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Location</span>
+                <span class="spec-value">${asset.location}</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Listed</span>
+                <span class="spec-value">${asset.postedDate}</span>
+            </div>
+            <div class="spec-item">
+                <span class="spec-label">Views</span>
+                <span class="spec-value">${asset.views}</span>
+            </div>
+        </div>
+    `;
+}
+
+// ========== PRICE CARD ==========
+
+function renderPriceCard(asset) {
+    const el = document.getElementById('detail-price-card');
+    if (!el) return;
+
+    el.innerHTML = `
+        <div class="price-card-top">
+            <div class="price-main">
+                <span class="price-amount" id="display-price-amount">${asset.price}</span>
+                <span class="price-period" id="display-price-period">/ ${asset.period}</span>
+            </div>
+            <div class="price-badge" id="display-price-badge">${asset.tags.includes('sell') ? 'For Sale' : 'For Rent'}</div>
+        </div>
+    `;
+}
+
+// ========== DEAL FORM ==========
+
+function renderDealForm(asset) {
+    const el = document.getElementById('detail-deal-card');
+    if (!el) return;
+
+    const dealOptions = asset.tags.map(tag => {
+        const labels = {
+            rent: { icon: 'bi-key-fill', label: 'Rent', desc: 'Pay per ' + asset.period },
+            sell: { icon: 'bi-tag-fill', label: 'Buy / Sell', desc: 'One-time purchase' },
+            barter: { icon: 'bi-arrow-left-right', label: 'Barter', desc: 'Trade for another item' },
+        };
+        return labels[tag] || null;
+    }).filter(Boolean);
+
+    el.innerHTML = `
+        <h3 class="deal-card-title"><i class="bi bi-handshake me-2"></i>Finalize Your Deal</h3>
+        
+        <div class="deal-options" id="deal-options">
+            ${dealOptions.map((opt, i) => `
+                <label class="deal-option ${i === 0 ? 'selected' : ''}" id="deal-opt-${i}">
+                    <input type="radio" name="dealType" value="${opt.label}" ${i === 0 ? 'checked' : ''}>
+                    <div class="deal-option-content">
+                        <i class="bi ${opt.icon}"></i>
+                        <div>
+                            <div class="deal-option-label">${opt.label}</div>
+                            <div class="deal-option-desc">${opt.desc}</div>
+                        </div>
+                    </div>
+                    <div class="deal-option-check"><i class="bi bi-check-circle-fill"></i></div>
+                </label>
+            `).join('')}
+        </div>
+
+        <div class="deal-form-fields">
+            <div class="mb-3" id="date-range-group">
+                <label class="form-label fw-semibold">Preferred Date</label>
+                <input type="date" class="form-control" id="deal-date" min="${getTodayDate()}">
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Your Message</label>
+                <textarea class="form-control" id="deal-message" rows="3" placeholder="Hi, I'm interested in this ${asset.title.toLowerCase()}. Is it still available?"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Your Phone Number</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                    <input type="tel" class="form-control" id="deal-phone" placeholder="98XXXXXXXX">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100 rounded-pill deal-submit-btn" id="btn-submit-deal">
+            <i class="bi bi-check2-circle me-2"></i> Submit Deal Request
+        </button>
+        <p class="deal-disclaimer">
+            <i class="bi bi-info-circle me-1"></i>
+            No payment required now. The owner will confirm your request.
+        </p>
+    `;
+
+    // Deal option selection
+    el.querySelectorAll('.deal-option').forEach(option => {
+        option.addEventListener('click', () => {
+            el.querySelectorAll('.deal-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            const radio = option.querySelector('input');
+            radio.checked = true;
+            
+            // Update price display
+            const priceAmt = document.getElementById('display-price-amount');
+            const pricePer = document.getElementById('display-price-period');
+            const priceBdg = document.getElementById('display-price-badge');
+            
+            if (radio.value === 'Buy / Sell' && asset.sellPrice) {
+                priceAmt.textContent = asset.sellPrice;
+                pricePer.textContent = '';
+                priceBdg.textContent = 'For Sale';
+            } else {
+                priceAmt.textContent = asset.price;
+                pricePer.textContent = '/ ' + asset.period;
+                priceBdg.textContent = asset.tags.includes('rent') ? 'For Rent' : 'For Barter';
+            }
+        });
+    });
+    
+    // Trigger initial selection to set correct price if "Buy / Sell" is default
+    const initialSelected = el.querySelector('.deal-option.selected');
+    if (initialSelected) {
+        initialSelected.click();
+    }
+
+    // Submit deal
+    document.getElementById('btn-submit-deal').addEventListener('click', () => {
+        const phone = document.getElementById('deal-phone').value.trim();
+        if (!phone) {
+            document.getElementById('deal-phone').classList.add('is-invalid');
+            document.getElementById('deal-phone').focus();
+            return;
+        }
+        document.getElementById('deal-phone').classList.remove('is-invalid');
+
+        // Save request to localStorage
+        const dealType = document.querySelector('input[name="dealType"]:checked')?.value || 'Unknown';
+        const newReq = {
+            id: 'req-' + Date.now(),
+            assetId: asset.id,
+            dealType: dealType,
+            status: 'Pending',
+            timestamp: Date.now()
+        };
+        const requests = JSON.parse(localStorage.getItem('bastubazar_requests') || '[]');
+        // Optional: prevent exact duplicates if they hit submit twice
+        if (!requests.find(r => r.assetId === asset.id && r.dealType === dealType)) {
+            requests.unshift(newReq);
+            localStorage.setItem('bastubazar_requests', JSON.stringify(requests));
+        }
+
+        // Show success modal
+        const modal = new bootstrap.Modal(document.getElementById('dealSuccessModal'));
+        modal.show();
+
+        // Bind modal WhatsApp button
+        document.getElementById('btn-whatsapp-modal').onclick = () => {
+            openWhatsApp(asset);
+        };
+    });
+}
+
+// ========== OWNER CARD ==========
+
+function renderOwnerCard(asset) {
+    const el = document.getElementById('detail-owner-card');
+    if (!el) return;
+
+    const stars = getStarRating(asset.user.rating);
+
+    el.innerHTML = `
+        <h3 class="owner-card-title"><i class="bi bi-person-circle me-2"></i>Listed by</h3>
+        <div class="owner-info">
+            <div class="owner-avatar">
+                <span>${asset.user.initials}</span>
+            </div>
+            <div class="owner-details">
+                <div class="owner-name">${asset.user.name}</div>
+                <div class="owner-rating">
+                    ${stars}
+                    <span class="rating-num">${asset.user.rating}</span>
+                </div>
+            </div>
+            <div class="owner-badge">
+                <i class="bi bi-patch-check-fill"></i> Verified
+            </div>
+        </div>
+        <div class="owner-stats">
+            <div class="owner-stat">
+                <span class="owner-stat-num">${asset.user.listings}</span>
+                <span class="owner-stat-label">Listings</span>
+            </div>
+            <div class="owner-stat">
+                <span class="owner-stat-num">${asset.user.rating}</span>
+                <span class="owner-stat-label">Rating</span>
+            </div>
+            <div class="owner-stat">
+                <span class="owner-stat-num">${asset.user.joined}</span>
+                <span class="owner-stat-label">Joined</span>
+            </div>
+        </div>
+        <div class="owner-actions">
+            <button class="btn btn-whatsapp w-100 rounded-pill" id="btn-contact-whatsapp" onclick="openWhatsApp(window._currentAsset)">
+                <i class="bi bi-whatsapp me-2"></i> Contact on WhatsApp
+            </button>
+            <button class="btn btn-outline-secondary w-100 rounded-pill mt-2" id="btn-call-owner" onclick="callOwner(window._currentAsset)">
+                <i class="bi bi-telephone-fill me-2"></i> Call Owner
+            </button>
+        </div>
+    `;
+
+    // Store asset reference for onclick handlers
+    window._currentAsset = asset;
+}
+
+// ========== SIMILAR LISTINGS ==========
+
+function renderSimilarListings(asset, allAssets) {
+    const grid = document.getElementById('similar-grid');
+    if (!grid) return;
+
+    const similar = allAssets
+        .filter(a => a.id !== asset.id && a.category === asset.category)
+        .slice(0, 4);
+
+    // If not enough from same category, fill with random
+    if (similar.length < 3) {
+        const others = allAssets.filter(a => a.id !== asset.id && !similar.includes(a)).slice(0, 3 - similar.length);
+        similar.push(...others);
+    }
+
+    grid.innerHTML = similar.map(asset => `
+        <div class="col-sm-6 col-lg-3">
+            <div class="asset-card" role="button" tabindex="0" onclick="window.location.href='detail.html?id=${asset.id}'">
+                <div class="asset-card-img">
+                    ${asset.imageSrc ? 
+                        `<img src="${asset.imageSrc}" style="width:100%; height:100%; object-fit:cover;">` : 
+                        `<div class="img-placeholder" style="background: linear-gradient(135deg, ${asset.color || '#D1FAE5'}, ${adjustColor(asset.color || '#D1FAE5', -10)})">
+                            <span>${asset.emoji || '📦'}</span>
+                        </div>`
+                    }
+                    <span class="asset-card-category-badge">${asset.category}</span>
+                </div>
+                <div class="asset-card-body">
+                    <div class="asset-card-title">${asset.title}</div>
+                    <div class="asset-card-location">
+                        <i class="bi bi-geo-alt-fill"></i> ${asset.location}
+                    </div>
+                    <div class="mb-2 text-warning d-flex align-items-center gap-1" style="font-size: 0.8rem;">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        <span class="text-muted ms-1 fw-medium">(5)</span>
+                    </div>
+                    <div class="asset-card-tags">
+                        ${asset.tags.map(tag => `<span class="tag tag-${tag}">${capitalizeStr(tag)}</span>`).join('')}
+                    </div>
+                    <div class="asset-card-footer">
+                        <div class="asset-price">
+                            ${asset.price} <span>/ ${asset.period}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ========== WHATSAPP & CALL ==========
+
+function openWhatsApp(asset) {
+    const dealType = document.querySelector('input[name="dealType"]:checked');
+    const dealLabel = dealType ? dealType.value : 'deal';
+    const currentPrice = document.getElementById('display-price-amount')?.textContent || asset.price;
+    const currentPeriod = document.getElementById('display-price-period')?.textContent || ('/ ' + asset.period);
+    const message = encodeURIComponent(
+        `Hi ${asset.user.name}! 👋\n\nI'm interested in your listing on BastuBazar:\n📦 *${asset.title}*\n📍 ${asset.location}\n💰 ${currentPrice} ${currentPeriod}\n\nDeal type: ${dealLabel}\n\nIs this still available? I'd love to discuss the details.`
+    );
+    window.open(`https://wa.me/${asset.user.phone}?text=${message}`, '_blank');
+}
+
+function callOwner(asset) {
+    window.location.href = `tel:+${asset.user.phone}`;
+}
+
+// ========== NAVBAR SCROLL ==========
+
+function initNavbarScroll() {
+    const navbar = document.getElementById('main-navbar');
+    if (!navbar) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    }, { passive: true });
+}
+
+// ========== HELPERS ==========
+
+function capitalizeStr(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function adjustColor(hex, amount) {
+    let color = hex.replace('#', '');
+    if (color.length === 3) {
+        color = color.split('').map(c => c + c).join('');
+    }
+    const num = parseInt(color, 16);
+    let r = Math.min(255, Math.max(0, (num >> 16) + amount));
+    let g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
+    let b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
+    return `#${(1 << 24 | r << 16 | g << 8 | b).toString(16).slice(1)}`;
+}
+
+function getTodayDate() {
+    const d = new Date();
+    return d.toISOString().split('T')[0];
+}
+
+function getStarRating(rating) {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+    let html = '';
+    for (let i = 0; i < full; i++) html += '<i class="bi bi-star-fill text-warning"></i>';
+    for (let i = 0; i < half; i++) html += '<i class="bi bi-star-half text-warning"></i>';
+    for (let i = 0; i < empty; i++) html += '<i class="bi bi-star text-warning"></i>';
+    return html;
+}
+
+// ========== REVIEW SYSTEM ==========
+function initReviewSystem(asset) {
+    window.currentAssetIdForReview = asset.id;
+    
+    // Star selector logic
+    const stars = document.querySelectorAll('#star-selector i');
+    const input = document.getElementById('review-rating');
+    
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const val = parseInt(star.getAttribute('data-val'));
+            input.value = val;
+            
+            stars.forEach(s => {
+                const sVal = parseInt(s.getAttribute('data-val'));
+                if (sVal <= val) {
+                    s.classList.remove('bi-star');
+                    s.classList.add('bi-star-fill');
+                } else {
+                    s.classList.remove('bi-star-fill');
+                    s.classList.add('bi-star');
+                }
+            });
+        });
+    });
+
+    renderReviews();
+}
+
+window.submitReview = function() {
+    const text = document.getElementById('review-text').value;
+    const rating = parseInt(document.getElementById('review-rating').value);
+    
+    const user = typeof getCurrentUser !== 'undefined' ? getCurrentUser() : null;
+    const reviewerName = user ? user.name : 'Guest User';
+    
+    const reviews = JSON.parse(localStorage.getItem('bastubazar_reviews') || '[]');
+    
+    reviews.push({
+        assetId: window.currentAssetIdForReview,
+        reviewer: reviewerName,
+        rating: rating,
+        text: text,
+        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    });
+    
+    localStorage.setItem('bastubazar_reviews', JSON.stringify(reviews));
+    
+    document.getElementById('review-msg').style.display = 'block';
+    document.getElementById('review-text').value = '';
+    
+    setTimeout(() => {
+        document.getElementById('review-msg').style.display = 'none';
+        renderReviews();
+    }, 2000);
+};
+
+function renderReviews() {
+    const list = document.getElementById('reviews-list');
+    if (!list) return;
+    
+    const reviews = JSON.parse(localStorage.getItem('bastubazar_reviews') || '[]');
+    const assetReviews = reviews.filter(r => r.assetId === window.currentAssetIdForReview);
+    
+    if (assetReviews.length === 0) {
+        list.innerHTML = '<div class="text-muted p-4 bg-light rounded-4 text-center">No reviews yet. Be the first to review this asset!</div>';
+        return;
+    }
+    
+    list.innerHTML = assetReviews.map(r => {
+        const stars = Array(5).fill(0).map((_, i) => 
+            i < r.rating ? '<i class="bi bi-star-fill text-warning"></i>' : '<i class="bi bi-star text-warning"></i>'
+        ).join('');
+        
+        return `
+            <div class="card border-0 bg-light p-3 rounded-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="fw-bold">${r.reviewer}</div>
+                    <div class="text-muted small">${r.date}</div>
+                </div>
+                <div class="mb-2" style="font-size: 0.9rem;">${stars}</div>
+                <p class="mb-0 text-dark" style="font-size: 0.95rem;">${r.text}</p>
+            </div>
+        `;
+    }).join('');
+}

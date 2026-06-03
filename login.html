@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login to BastuBazar â€” Nepal's trusted platform for renting, selling, and bartering everyday assets.">
+    <title>Login â€” BastuBazar</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--pri-bg) 0%, #fff 100%);
+            padding: 2rem;
+            position: relative;
+        }
+        .login-back {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            font-weight: 500;
+            color: #6b7280;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+        .login-back:hover {
+            color: var(--pri);
+        }
+        .login-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 440px;
+            padding: 3rem 2.5rem;
+            border: 1px solid #e5e7eb;
+        }
+        .login-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 2rem;
+            text-decoration: none;
+        }
+        .login-brand .brand-icon {
+            width: 38px;
+            height: 38px;
+            font-size: 1.1rem;
+        }
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        .form-control {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border-color: #d1d5db;
+        }
+        .form-control:focus {
+            border-color: var(--pri);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+        .login-btn {
+            padding: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #9ca3af;
+            font-size: 0.85rem;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .divider:not(:empty)::before {
+            margin-right: .75em;
+        }
+        .divider:not(:empty)::after {
+            margin-left: .75em;
+        }
+        .google-btn {
+            padding: 0.75rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border-color: #d1d5db;
+            color: #374151;
+        }
+        .google-btn:hover {
+            background: #f9fafb;
+        }
+        .demo-roles {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .demo-btn {
+            flex: 1;
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+    </style>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+</head>
+<body>
+
+<div class="login-page">
+    <a href="index.html" class="login-back">
+        <i class="bi bi-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="login-card" id="onboarding-container" style="display: none;">
+        <h3 class="text-center fw-bold mb-3">Welcome to BastuBazar!</h3>
+        <p class="text-center text-muted mb-4">How do you plan to use the platform?</p>
+        <div class="d-flex flex-column gap-3">
+            <button class="btn btn-outline-success btn-lg text-start px-4 py-3" onclick="selectRole('buyer')">
+                <i class="bi bi-bag fs-4 me-3 text-success"></i>
+                <span class="fw-bold">I want to Buy/Rent</span>
+            </button>
+            <button class="btn btn-outline-info btn-lg text-start px-4 py-3" onclick="selectRole('seller')">
+                <i class="bi bi-shop fs-4 me-3 text-info"></i>
+                <span class="fw-bold">I want to Sell/List</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="login-card" id="login-card-main">
+        <a href="index.html" class="login-brand">
+            <span class="brand-icon"><i class="bi bi-arrow-left-right"></i></span>
+            BastuBazar
+        </a>
+        
+        <p class="text-center text-muted mb-4" style="font-size: 0.95rem;">Sign in to your account to continue</p>
+
+        <!-- EMAIL LOGIN -->
+        <form onsubmit="event.preventDefault(); loginWithEmail();">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
+                <button type="button" class="btn btn-sm position-absolute end-0 bottom-0 text-muted" style="height: 44px; z-index: 10;" onclick="const p=document.getElementById('password'); p.type=p.type==='password'?'text':'password'; this.innerHTML=p.type==='password'?'<i class=\'bi bi-eye\'></i>':'<i class=\'bi bi-eye-slash\'></i>';">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 login-btn">
+                Log In
+            </button>
+        </form>
+
+        <div class="divider">OR</div>
+
+        <!-- GOOGLE LOGIN -->
+        <button class="btn btn-outline-dark w-100 google-btn" onclick="loginWithGoogle()">
+            <i class="bi bi-google text-danger me-2"></i> Sign in with Google
+        </button>
+
+        <div class="divider">DEMO LOGIN (NO AUTH REQUIRED)</div>
+        
+        <div class="demo-roles">
+            <button class="btn btn-outline-success demo-btn" onclick="demoLogin('buyer')"><i class="bi bi-bag me-1"></i> Buyer</button>
+            <button class="btn btn-outline-info demo-btn" onclick="demoLogin('seller')"><i class="bi bi-shop me-1"></i> Seller</button>
+            <button class="btn btn-outline-dark demo-btn" onclick="demoLogin('admin')"><i class="bi bi-shield-lock me-1"></i> Admin</button>
+        </div>
+
+        <p id="msg" class="text-center mt-3 text-danger fw-medium" style="font-size: 0.9rem;"></p>
+        
+        <p class="text-center mt-4 mb-0 text-muted" style="font-size: 0.85rem;">
+            Don't have an account? <a href="#" class="text-primary text-decoration-none fw-semibold">Sign up</a>
+        </p>
+
+    </div>
+</div>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Config -->
+<script src="js/firebase-config.js"></script>
+
+<!-- Auth Logic -->
+<script src="js/auth.js"></script>
+
+</body>
+</html>
