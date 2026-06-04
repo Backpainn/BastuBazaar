@@ -1,5 +1,5 @@
-/* ============================================
-   BastuBazar — Authentication & Session Logic
+﻿/* ============================================
+   BastuBazaar — Authentication & Session Logic
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -175,19 +175,19 @@ function updateNavbarAuthState() {
             else if (user.role === 'admin') dashboard = 'admin.html';
 
             container.innerHTML = `
-                <a href="${dashboard}" class="btn btn-primary btn-sm rounded-pill px-3">
+                <a href="${dashboard}" class="btn btn-primary btn-sm rounded-2 px-3">
                     Dashboard
                 </a>
-                <button class="btn btn-danger btn-sm rounded-pill px-3" onclick="logout()">
+                <button class="btn btn-danger btn-sm rounded-2 px-3" onclick="logout()">
                     Logout
                 </button>
             `;
         } else {
             container.innerHTML = `
-                <a href="login.html" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                <a href="login.html" class="btn btn-outline-primary btn-sm rounded-2 px-3">
                     <i class="bi bi-person me-1"></i> Login
                 </a>
-                <a href="login.html" class="btn btn-primary btn-sm rounded-pill px-3">
+                <a href="login.html" class="btn btn-primary btn-sm rounded-2 px-3">
                     <i class="bi bi-plus-lg me-1"></i> List an Item
                 </a>
             `;

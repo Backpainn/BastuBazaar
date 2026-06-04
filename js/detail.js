@@ -1,5 +1,5 @@
-/* ============================================
-   BastuBazar — Detail Page Logic
+﻿/* ============================================
+   BastuBazaar — Detail Page Logic
    Requires: data.js loaded before this file
    ============================================ */
 
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    document.title = `${asset.title} — BastuBazar`;
+    document.title = `${asset.title} — BastuBazaar`;
     renderBreadcrumb(asset);
     renderImage(asset);
     renderMeta(asset);
@@ -59,7 +59,6 @@ function renderImage(asset) {
         </div>
         <div class="detail-img-badges">
             <span class="badge-category"><i class="bi bi-tag-fill me-1"></i>${asset.category}</span>
-            <span class="badge-views"><i class="bi bi-eye-fill me-1"></i>${asset.views} views</span>
         </div>
     `;
 }
@@ -130,10 +129,6 @@ function renderSpecs(asset) {
                 <span class="spec-label">Listed</span>
                 <span class="spec-value">${asset.postedDate}</span>
             </div>
-            <div class="spec-item">
-                <span class="spec-label">Views</span>
-                <span class="spec-value">${asset.views}</span>
-            </div>
         </div>
     `;
 }
@@ -164,7 +159,7 @@ function renderDealForm(asset) {
     const dealOptions = asset.tags.map(tag => {
         const labels = {
             rent: { icon: 'bi-key-fill', label: 'Rent', desc: 'Pay per ' + asset.period },
-            sell: { icon: 'bi-tag-fill', label: 'Buy / Sell', desc: 'One-time purchase' },
+            sell: { icon: 'bi-tag-fill', label: 'Buy', desc: 'One-time purchase' },
             barter: { icon: 'bi-arrow-left-right', label: 'Barter', desc: 'Trade for another item' },
         };
         return labels[tag] || null;
@@ -229,7 +224,7 @@ function renderDealForm(asset) {
             const pricePer = document.getElementById('display-price-period');
             const priceBdg = document.getElementById('display-price-badge');
             
-            if (radio.value === 'Buy / Sell' && asset.sellPrice) {
+            if (radio.value === 'Buy' && asset.sellPrice) {
                 priceAmt.textContent = asset.sellPrice;
                 pricePer.textContent = '';
                 priceBdg.textContent = 'For Sale';
@@ -396,7 +391,7 @@ function openWhatsApp(asset) {
     const currentPrice = document.getElementById('display-price-amount')?.textContent || asset.price;
     const currentPeriod = document.getElementById('display-price-period')?.textContent || ('/ ' + asset.period);
     const message = encodeURIComponent(
-        `Hi ${asset.user.name}! 👋\n\nI'm interested in your listing on BastuBazar:\n📦 *${asset.title}*\n📍 ${asset.location}\n💰 ${currentPrice} ${currentPeriod}\n\nDeal type: ${dealLabel}\n\nIs this still available? I'd love to discuss the details.`
+        `Hi ${asset.user.name}! 👋\n\nI'm interested in your listing on BastuBazaar:\n📦 *${asset.title}*\n📍 ${asset.location}\n💰 ${currentPrice} ${currentPeriod}\n\nDeal type: ${dealLabel}\n\nIs this still available? I'd love to discuss the details.`
     );
     window.open(`https://wa.me/${asset.user.phone}?text=${message}`, '_blank');
 }

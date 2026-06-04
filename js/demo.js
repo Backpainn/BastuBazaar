@@ -1,5 +1,5 @@
-/* ============================================
-   BastuBazar — Hackathon Demo Module
+﻿/* ============================================
+   BastuBazaar — Hackathon Demo Module
    Shows how to rent something & put it on rent
    ============================================ */
 
@@ -286,7 +286,7 @@
                 <div style="background: linear-gradient(135deg, #ede9fe, #e0e7ff); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem;">
                     <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #7c3aed;"></i>
                     <div style="font-size: 0.85rem; color: #4c1d95;">
-                        <strong>Quick listing!</strong> Fill in the details below and your item will appear on BastuBazar for others to rent.
+                        <strong>Quick listing!</strong> Fill in the details below and your item will appear on BastuBazaar for others to rent.
                     </div>
                 </div>
 
@@ -357,7 +357,7 @@
                 </div>
 
                 <button class="demo-submit-btn" id="demo-list-submit" onclick="window._demoSubmitList()">
-                    <i class="bi bi-send-fill me-2"></i>List Item on BastuBazar
+                    <i class="bi bi-send-fill me-2"></i>List Item on BastuBazaar
                 </button>
             </div>
         `;
@@ -443,7 +443,7 @@
                         <i class="bi bi-check-lg"></i>
                     </div>
                     <h4>Your Item is Now Live! 🎉</h4>
-                    <p>Your listing "<strong>${asset.title}</strong>" is now visible to all users on BastuBazar. You'll receive notifications when someone is interested.</p>
+                    <p>Your listing "<strong>${asset.title}</strong>" is now visible to all users on BastuBazaar. You'll receive notifications when someone is interested.</p>
                     
                     <div class="demo-receipt">
                         <div class="demo-receipt-row">

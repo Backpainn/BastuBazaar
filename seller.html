@@ -1,9 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Dashboard â€” BastuBazar</title>
+    <meta name="description" content="Seller Dashboard — BastuBazaar. Manage your listings and post new assets to rent, sell, or barter on Nepal's trusted asset marketplace.">
+    <title>Seller Dashboard — BastuBazaar</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,70 +12,81 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
     
     <style>
         .dashboard-header {
-            background: var(--primary);
-            color: var(--white);
+            background: var(--pri);
+            color: #fff;
             padding: 3rem 0;
             margin-bottom: 3rem;
             position: relative;
             overflow: hidden;
         }
-        .dashboard-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
         .dashboard-title {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 800;
             position: relative;
             z-index: 2;
         }
         .dashboard-subtitle {
-            color: var(--primary-light);
+            color: var(--pri-sub);
             font-size: 1.1rem;
             position: relative;
             z-index: 2;
         }
         .upload-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: var(--radius-lg);
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             padding: 2rem;
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        body.dark-theme .upload-card {
+            background: #1f2937;
+            border-color: #374151;
         }
         .img-upload-box {
-            border: 2px dashed var(--gray-300);
-            border-radius: var(--radius-md);
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
             padding: 2rem;
             text-align: center;
-            background: var(--gray-50);
+            background: #f9fafb;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.2s ease;
+        }
+        body.dark-theme .img-upload-box {
+            background: #111827;
+            border-color: #374151;
         }
         .img-upload-box:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
+            border-color: var(--pri);
+            background: var(--pri-bg);
         }
         .img-upload-box i {
             font-size: 2.5rem;
-            color: var(--primary);
+            color: var(--pri);
             margin-bottom: 0.5rem;
         }
         #img-preview {
             max-width: 100%;
-            border-radius: var(--radius-md);
+            border-radius: 8px;
             display: none;
             margin-top: 1rem;
+        }
+        /* Profile card responsive */
+        @media (max-width: 575.98px) {
+            .card-body.d-flex.align-items-center {
+                flex-direction: column;
+                text-align: center;
+            }
+            .card-body.d-flex.align-items-center .d-flex.gap-3 {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
         }
     </style>
     <!-- Favicon -->
@@ -87,7 +99,7 @@
         <div class="container">
             <a class="navbar-brand" href="index.html">
                 <span class="brand-icon"><i class="bi bi-arrow-left-right"></i></span>
-                BastuBazar
+                BastuBazaar
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -117,7 +129,7 @@
             <!-- Left: Active Listings -->
             <div class="col-lg-7">
                 <!-- Seller Profile Card -->
-                <div class="card border-0 shadow-sm rounded-4 mb-5">
+                <div class="card border-0 shadow-sm rounded-3 mb-5">
                     <div class="card-body p-4 d-flex align-items-center gap-4">
                         <div class="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 80px; height: 80px; font-size: 2rem; font-weight: bold;">
                             <span id="seller-initials">S</span>
@@ -168,7 +180,7 @@
                         </div>
                         
                         <div class="row mb-3">
-                            <div class="col-6">
+                            <div class="col-12 col-sm-6">
                                 <label class="form-label fw-semibold">Category</label>
                                 <select class="form-select" id="asset-category" required>
                                     <option value="" disabled selected>Select...</option>
@@ -182,7 +194,7 @@
                                     <option value="Event Goods">Event Goods</option>
                                 </select>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-sm-6">
                                 <label class="form-label fw-semibold">Location</label>
                                 <select class="form-select" id="asset-location" required>
                                     <option value="" disabled selected>Select location...</option>
@@ -255,11 +267,11 @@
                         </div>
 
                         <div class="row mb-4">
-                            <div class="col-6">
+                            <div class="col-12 col-sm-6">
                                 <label class="form-label fw-semibold">Price (NPR)</label>
                                 <input type="number" class="form-control" id="asset-price" placeholder="5000" required>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-sm-6">
                                 <label class="form-label fw-semibold">Period</label>
                                 <select class="form-select" id="asset-period">
                                     <option value="day">per day</option>
@@ -270,7 +282,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-2">
                             <i class="bi bi-send-fill me-2"></i> Post Listing
                         </button>
                     </form>
@@ -297,5 +309,6 @@
     <script src="js/seller.js"></script>
 </body>
 </html>
+
 
 

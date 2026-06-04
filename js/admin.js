@@ -1,5 +1,5 @@
-/* ============================================
-   BastuBazar — Admin Dashboard Logic
+﻿/* ============================================
+   BastuBazaar — Admin Dashboard Logic
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,9 +1,9 @@
-# BastuBazar — Complete Project Memory & Documentation
+# BastuBazaar — Complete Project Memory & Documentation
 
 ## 1. Project Vision & Overview
-BastuBazar is a modern, responsive marketplace web application specifically tailored for the Nepal market. It facilitates the **Renting, Selling, and Bartering** of physical assets ranging from agricultural equipment and real estate to event goods and electronics. 
+BastuBazaar is a modern, responsive marketplace web application specifically tailored for the Nepal market. It facilitates the **Renting, Selling, and Bartering** of physical assets ranging from agricultural equipment and real estate to event goods and electronics. 
 
-The core mission of BastuBazar is to empower users to safely and cleanly discover assets, make deals, and manage their listings with an app-like experience on the web.
+The core mission of BastuBazaar is to empower users to safely and cleanly discover assets, make deals, and manage their listings with an app-like experience on the web.
 
 ---
 
@@ -17,16 +17,24 @@ The project was explicitly built to be lightweight, fast, and easily deployable 
 
 ---
 
-## 3. UI/UX Design System
-The design philosophy is **"Trust & Tech"**. It aims to wow users with a premium, polished aesthetic.
+## 3. UI/UX Design System & Spacing
+The design philosophy follows the **Uncodixfy** guidelines, prioritizing clean, professional, and content-centric layouts instead of over-decorated "AI-cliches".
 
-**Core CSS Tokens:**
-- `--primary`: `#4F46E5` (Indigo)
-- `--primary-light`: `#EEF2FF`
-- `--secondary`: `#10B981` (Emerald Green for success/money)
-- `--dark`: `#0F172A` (Slate for deep text and headers)
-- **Gradients**: Widespread use of 135-degree linear gradients (e.g. Indigo to Purple) for headers and image placeholders.
-- **Interactions**: Subtle `transform: translateY(-2px)` and `box-shadow` transitions on hover to make the interface feel alive.
+**Core CSS Tokens & Variables (style.css):**
+- `--pri`: `#4F46E5` (Primary Indigo)
+- `--pri-h`: `#4338CA` (Primary Hover)
+- `--pri-bg`: `#EEF2FF` (Primary Background)
+- `--pri-sub`: `#E0E7FF` (Primary Border/Subtitle)
+- `--ok`: `#059669` (Success Green)
+- `--warn`: `#D97706` (Warning Amber)
+- `--err`: `#DC2626` (Error Red)
+
+**Layout & Alignment Rules:**
+- **Border Radii**: Constrained to a standard maximum of `8px` or `12px` (`rounded-2` / `rounded-3`). Pill shapes (`999px` / `rounded-pill`) have been completely replaced with compact rectangular radii.
+- **Spacing**: Global vertical section padding is standardized to `5.5rem 0` on desktop and scales dynamically to `3rem 0` on mobile screens. Section headers have a bottom margin of `3.5rem` to avoid text crowding.
+- **Shadows & Gradients**: Heavy drop shadows are replaced with a single subtle elevation `0 2px 8px rgba(0, 0, 0, 0.08)`. Gradients are avoided on sections to maintain visual clarity.
+- **Animations & Text**: Bouncy scales and hover transforms are disabled. Labels use natural casing instead of forced uppercase characters.
+- **Navbar Collapsing**: In dark mode, mobile collapses correctly display with a dark background (`#111827`).
 
 ---
 

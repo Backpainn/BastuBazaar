@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="BastuBazar - Rent, sell, and barter everyday assets like land, vehicles, cameras, and more. Nepal's trusted asset marketplace.">
+    <meta name="description" content="BastuBazaar - Rent, sell, and barter everyday assets like land, vehicles, cameras, and more. Nepal's trusted asset marketplace.">
     <title>BastuBazaar — Rent, Sell & Barter Everyday Assets</title>
 
     <!-- Bootstrap 5 CSS -->
@@ -30,7 +30,7 @@
         <div class="container">
             <a class="navbar-brand" href="#" id="brand-logo">
                 <span class="brand-icon"><i class="bi bi-arrow-left-right"></i></span>
-                BastuBazar
+                BastuBazaar
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -55,10 +55,10 @@
                         <i class="bi bi-moon-fill"></i>
                     </button>
                     <div id="auth-buttons-container" class="d-flex gap-2">
-                        <a href="login.html" class="btn btn-outline-primary btn-sm rounded-pill px-3" id="btn-login">
+                        <a href="login.html" class="btn btn-outline-primary btn-sm rounded-2 px-3" id="btn-login">
                             <i class="bi bi-person me-1"></i> Login
                         </a>
-                        <a href="login.html" class="btn btn-primary btn-sm rounded-pill px-3" id="btn-list-item">
+                        <a href="login.html" class="btn btn-primary btn-sm rounded-2 px-3" id="btn-list-item">
                             <i class="bi bi-plus-lg me-1"></i> List an Item
                         </a>
                     </div>
@@ -70,47 +70,29 @@
     <!-- ========== HERO SECTION ========== -->
     <section class="hero-section" id="hero-section">
         <div class="container">
-            <div class="row align-items-center min-vh-75">
-                <div class="col-lg-7">
+            <div class="row align-items-center justify-content-center py-5 mt-2">
+                <div class="col-lg-10 mx-auto text-center">
 
-                    <h1 class="hero-title">
-                        Rent, Sell & Barter<br>
-                        <span class="text-gradient">Everyday Assets</span>
+                    <h1 class="hero-title display-4 fw-bold mb-4" style="letter-spacing: -0.02em; line-height: 1.2;">
+                        Rent, Buy & Barter <span class="text-primary">Everyday Assets</span>
                     </h1>
-                    <p class="hero-subtitle">
-                        From tractors to cameras, land to event supplies — rent, sell, or barter what you own. Join thousands of Nepalis trading smarter.
+                    <p class="hero-subtitle mx-auto lead text-secondary mb-5" style="max-width: 720px; font-size: 1.2rem; line-height: 1.6;">
+                        From tractors to cameras, land to event supplies — rent, buy, or barter what you own. Join thousands of Nepalis trading smarter.
                     </p>
-                    <div class="hero-search-box">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="bi bi-search text-muted"></i>
+                    <div class="hero-search-box mx-auto" style="max-width: 550px;">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text border-0 pe-2">
+                                <i class="bi bi-search text-muted fs-5"></i>
                             </span>
-                            <input type="text" class="form-control border-start-0" placeholder="Search for tractors, cameras, land..." id="hero-search-input">
-                            <button class="btn btn-primary px-4" type="button" id="hero-search-btn">
+                            <input type="text" class="form-control border-0 shadow-none" placeholder="Search for tractors, cameras, land..." id="hero-search-input" style="font-size: 1rem;">
+                            <button class="btn btn-primary px-4 rounded-2 fw-semibold shadow-sm" type="button" id="hero-search-btn">
                                 Search
                             </button>
                         </div>
                     </div>
 
                 </div>
-                <div class="col-lg-5 d-none d-lg-block">
-                    <div class="hero-illustration">
-                        <div class="floating-card card-1">
-                            <i class="bi bi-truck text-primary"></i>
-                            <span>Tractor Rented!</span>
-                        </div>
-                        <div class="floating-card card-2">
-                            <i class="bi bi-camera text-success"></i>
-                            <span>Camera Bartered</span>
-                        </div>
-                        <div class="floating-card card-3">
-                            <i class="bi bi-house text-warning"></i>
-                            <span>Land Listed</span>
-                        </div>
-                        <div class="hero-circle"></div>
-                        <div class="hero-circle hero-circle-2"></div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </section>
@@ -148,7 +130,7 @@
                     <i class="bi bi-arrow-left-right me-1"></i> Barter
                 </button>
                 <button class="filter-pill" data-filter="sell" id="filter-sell">
-                    <i class="bi bi-tag-fill me-1"></i> Sell
+                    <i class="bi bi-tag-fill me-1"></i> Buy
                 </button>
             </div>
 
@@ -159,7 +141,7 @@
 
             <!-- Load More -->
             <div class="text-center mt-5">
-                <button class="btn btn-outline-primary btn-lg rounded-pill px-5" id="btn-load-more">
+                <button class="btn btn-outline-primary btn-lg rounded-2 px-5" id="btn-load-more">
                     <i class="bi bi-arrow-down-circle me-2"></i> Load More Listings
                 </button>
             </div>
@@ -207,12 +189,12 @@
         <div class="container">
             <div class="cta-card">
                 <div class="row align-items-center">
-                    <div class="col-lg-7">
+                    <div class="col-lg-10 mx-auto text-center">
                         <h2 class="cta-title">Have an asset sitting idle?</h2>
-                        <p class="cta-text">Rent it out, sell it, or barter for something you need. List on BastuBazar in under 2 minutes.</p>
+                        <p class="cta-text">Rent it out, sell it, or barter for something you need. List on BastuBazaar in under 2 minutes.</p>
                     </div>
                     <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
-                        <button class="btn btn-light btn-lg rounded-pill px-5 cta-btn" id="btn-cta-list">
+                        <button class="btn btn-light btn-lg rounded-2 px-5 cta-btn" id="btn-cta-list">
                             <i class="bi bi-plus-circle me-2"></i> List Your Asset — Free
                         </button>
                     </div>

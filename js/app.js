@@ -1,5 +1,5 @@
 /* ============================================
-   BastuBazar — Home Page Logic
+   BastuBazaar — Home Page Logic
    Requires: data.js loaded before this file
    ============================================ */
 
@@ -384,11 +384,7 @@ function performSearch(query) {
         (a.description && a.description.toLowerCase().includes(query))
     );
 
-    // If there's exactly one result, navigate directly to it
-    if (searchResults.length === 1) {
-        window.location.href = `detail.html?id=${searchResults[0].id}`;
-        return;
-    }
+
 
     const savedIds = JSON.parse(localStorage.getItem('bastubazar_wishlist') || '[]');
 

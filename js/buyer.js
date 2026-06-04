@@ -1,5 +1,5 @@
-/* ============================================
-   BastuBazar — Buyer Dashboard Logic
+﻿/* ============================================
+   BastuBazaar — Buyer Dashboard Logic
    ============================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
